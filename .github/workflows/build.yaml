@@ -74,6 +74,7 @@ jobs:
         run: |
           mkdir release 
           copy waternet.ino.hex release\waternet.hex
+          copy waternet.ino.bin release\waternet.bin
           
       # upload our artifact
       - name: Store artifact
