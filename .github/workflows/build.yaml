@@ -29,8 +29,7 @@ jobs:
         include:
           # This works like this: when the platform is "arduino:samd", the
           # variable `fqbn` is set to "arduino:samd:nano_33_iot".
-          - arduino-platform: "arduino:samd"
-            extra-platform: "gamebuino:samd"
+          - arduino-platform: "gamebuino:samd"
             fqbn: "gamebuino:samd:gamebuino_meta_native"
 
     # This is the platform GitHub will use to run our workflow, we
@@ -54,7 +53,6 @@ jobs:
         run: |
           arduino-cli core update-index --additional-urls https://gamebuino.com/sdk/package_gamebuino_index.json
           arduino-cli core install ${{ matrix.arduino-platform }}
-          arduino-cli core install ${{ matrix.extra-platform }}
       
       
       # install Gamebuino META libraries used 
