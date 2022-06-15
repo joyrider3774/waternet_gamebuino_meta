@@ -314,6 +314,7 @@ void SelectMusic(uint8_t musicFile, uint8_t force)
         if (track != -1)
         {
             gb.sound.stop(track);
+            track = -1;
         }
 
         switch (musicFile) 
