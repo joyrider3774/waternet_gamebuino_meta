@@ -49,13 +49,6 @@ You can find the music files i used for the game below:
 * Title Music: [https://onlinesequencer.net/2484977](https://onlinesequencer.net/2484977)
 * Level Done Tune: [https://onlinesequencer.net/2484974](https://onlinesequencer.net/2484974)
 
-## EEPROM
-The game uses EEPROM for saving it's progress, you can find and change these values in [savestate.cpp](source/waternet/src/savestate.cpp)
-
-| Start address | End address | Bytes used |
-| ------------- | ----------- | ---------- |
-| 493           | 505         | 13         |
-
 ## Photo's of the game running on real hardware
 
 <img src="images/hardware1.jpg"> <img src="images/hardware2.jpg"> <img src="images/hardware3.jpg"> <img src="images/hardware4.jpg"> <img src="images/hardware5.jpg">
