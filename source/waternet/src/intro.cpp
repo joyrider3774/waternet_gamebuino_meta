@@ -46,7 +46,7 @@ void intro()
             gb.display.drawImage(0, (uint16_t)titlePosY, titlescreenMap);
             if(titlePosY > 0)
             {
-                titlePosY -= (float)40/(float)frameRate;
+                titlePosY -= (float)60/(float)frameRate;
             }
             else
             {

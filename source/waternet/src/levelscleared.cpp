@@ -11,30 +11,30 @@
 
 void initLevelsCleared()
 {
-    setPaletteGame();
+    setPaletteTitle();
     set_bkg_data(&congratsScreenTiles);
     gb.display.clear(INDEX_BLACK);
     gb.display.drawImage(0, 0, congratsMap);
     switch (difficulty)
     {
         case diffVeryEasy:
-            printCongratsScreen(0, 3, F("VERY EASY LEVELS"));
+            printCongratsScreen(2, 7, F("VERY EASY LEVELS"));
             break;
         
         case diffEasy:
-            printCongratsScreen(3, 3, F("EASY LEVELS"));
+            printCongratsScreen(4, 7, F("EASY LEVELS"));
             break;
     
         case diffNormal:
-            printCongratsScreen(2, 3, F("NORMAL LEVELS"));
+            printCongratsScreen(3, 7, F("NORMAL LEVELS"));
             break;
 
         case diffHard:
-            printCongratsScreen(3, 3, F("HARD LEVELS"));
+            printCongratsScreen(4, 7, F("HARD LEVELS"));
             break;
     
         case diffVeryHard:
-            printCongratsScreen(0, 3, F("VERY HARD LEVELS"));
+            printCongratsScreen(2, 7, F("VERY HARD LEVELS"));
             break;
     }
     SelectMusic(musAllLevelsClear);

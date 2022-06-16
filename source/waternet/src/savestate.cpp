@@ -9,6 +9,7 @@ constexpr uint8_t musicOptionBit = 1U;
 
 uint32_t levelLocksPacked[3];
 uint8_t options = 0; //bit 0 sound on/off, bit 1 music on/off
+uint8_t activeColor = 0; 
 
 int addrLevelLocksPacked, addrOptions;
 
@@ -96,6 +97,8 @@ uint8_t validateSaveState()
     }
     if (options > 3) //bit 0 & 1 set = 3
         return 0;
+    if (activeColor > maxColorSelections)
+        return 0;
     return 1;
 }
 
@@ -105,6 +108,7 @@ void initSaveState()
     //read eeprom  
     gb.save.get(0, levelLocksPacked , sizeof(levelLocksPacked) );
     gb.save.get(1, &options, sizeof(options));
+    gb.save.get(2, &activeColor, sizeof(activeColor));
 
     if(!validateSaveState())
     { 
@@ -115,6 +119,7 @@ void initSaveState()
             for (uint8_t i=0; i<diffCount; i++)
                 packLevelLock(j, i, 1U); //1st level unlocked
         options = 3; //bit 0 & 1 set = music & sound on
+        activeColor = 2;
     }
 }
 
@@ -122,6 +127,7 @@ void saveSaveState()
 {
     gb.save.set(0, levelLocksPacked, sizeof(levelLocksPacked));
     gb.save.set(1, &options, sizeof(options));
+    gb.save.set(2, &activeColor, sizeof(activeColor));
 }
 
 void setMusicOnSaveState(uint8_t value)
@@ -140,6 +146,17 @@ void setMusicOnSaveState(uint8_t value)
 uint8_t isMusicOnSaveState()
 {
     return checkBit8(options, musicOptionBit);
+}
+
+void setActiveColorSaveState(uint8_t value)
+{
+    activeColor = value;
+    saveSaveState();
+}
+
+uint8_t getActiveColorSaveState()
+{
+    return activeColor;
 }
 
 void setSoundOnSaveState(uint8_t value)

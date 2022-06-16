@@ -20,15 +20,11 @@ constexpr uint8_t  gsLevelSelect = 2;
 constexpr uint8_t  gsLevelsCleared = 3;
 constexpr uint8_t  gsHelpRotate = 4;
 constexpr uint8_t  gsHelpRotate2 = 5;
-constexpr uint8_t  gsHelpRotate3 = 6;
-constexpr uint8_t  gsHelpRotateSlide = 7;
-constexpr uint8_t  gsHelpRotateSlide2 = 8;
-constexpr uint8_t  gsHelpRotateSlide3 = 9;
-constexpr uint8_t  gsHelpRotateSlide4 = 10;
-constexpr uint8_t  gsHelpSlide = 11;
-constexpr uint8_t  gsHelpSlide2 = 12;
-constexpr uint8_t  gsHelpSlide3 = 13;
-constexpr uint8_t  gsIntro = 14;
+constexpr uint8_t  gsHelpRotateSlide = 6;
+constexpr uint8_t  gsHelpRotateSlide2 = 7;
+constexpr uint8_t  gsHelpSlide = 8;
+constexpr uint8_t  gsHelpSlide2 = 9;
+constexpr uint8_t  gsIntro = 10;
 
 constexpr uint8_t  gsInitDiff = 50;
 
@@ -38,14 +34,10 @@ constexpr uint8_t  gsInitLevelSelect = gsInitDiff + gsLevelSelect;
 constexpr uint8_t  gsInitLevelsCleared = gsInitDiff + gsLevelsCleared;
 constexpr uint8_t  gsInitHelpRotate = gsInitDiff + gsHelpRotate;
 constexpr uint8_t  gsInitHelpRotate2 = gsInitDiff + gsHelpRotate2;
-constexpr uint8_t  gsInitHelpRotate3 = gsInitDiff + gsHelpRotate3;
 constexpr uint8_t  gsInitHelpRotateSlide = gsInitDiff + gsHelpRotateSlide;
 constexpr uint8_t  gsInitHelpRotateSlide2 = gsInitDiff + gsHelpRotateSlide2;
-constexpr uint8_t  gsInitHelpRotateSlide3 = gsInitDiff + gsHelpRotateSlide3;
-constexpr uint8_t  gsInitHelpRotateSlide4 = gsInitDiff + gsHelpRotateSlide4;
 constexpr uint8_t  gsInitHelpSlide = gsInitDiff + gsHelpSlide;
 constexpr uint8_t  gsInitHelpSlide2 = gsInitDiff + gsHelpSlide2;
-constexpr uint8_t  gsInitHelpSlide3 = gsInitDiff + gsHelpSlide3;
 constexpr uint8_t  gsInitIntro = gsInitDiff + gsIntro;
 
 
@@ -88,6 +80,8 @@ constexpr uint8_t  arrowRight = 121;
 constexpr uint8_t  leftMenu = 118;
 
 constexpr uint8_t  frameRate = 15;
+
+constexpr uint8_t  maxColorSelections = 3;
 
 extern uint8_t startPos, menuPos, 
         maxLevel, selectedLevel, boardX, boardY, difficulty, 

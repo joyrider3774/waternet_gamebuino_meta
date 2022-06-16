@@ -41,7 +41,7 @@ void drawTitleScreen()
             printMessage(7, 12, F("ROSLID"));
             break;
         case tsCredits:
-            printMessage(6, 8, F("CREDITS"));            
+            printMessage(7, 8, F("CREDITS"));            
             printMessage(5, 10, F("CREATED BY"));
             printMessage(4, 11, F("WILLEMS DAVY"));
             printMessage(4, 12, F("JOYRIDER3774"));
@@ -243,12 +243,13 @@ void titleScreen()
                             break;
                         case opColor:
                             uint8_t i = getPalIndex();
-                            if (i < 3)
+                            if (i < maxColorSelections)
                                 i++;
                             else
                                 i = 0;
                             setPalIndex(i);
                             setPaletteTitle();
+                            setActiveColorSaveState(i);
                             needRedraw = 1;
                             break;
                     }
@@ -317,7 +318,7 @@ void titleScreen()
                     randomSeedGame = getRandomSeed();
                     initLevel(randomSeedGame);
 
-                    gameState = gsInitLevelSelect;                   
+                    gameState = gsInitLevelSelect;
                 }  
                 break;
         }

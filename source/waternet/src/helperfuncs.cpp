@@ -17,7 +17,7 @@ const Color BLACK_WHITE_PALETTE_GAME[] = {
     (Color) MAKECOLOR(0,0,0), // 0x0
     (Color) MAKECOLOR(170,170,170), // 0x2
     (Color) MAKECOLOR(255,255,255), // 0x1
-    (Color) MAKECOLOR(85,85,85), // 0x3
+    (Color) MAKECOLOR(181,181,181), // 0x3
     (Color) MAKECOLOR(0,0,0), // 0x4
     (Color) MAKECOLOR(255,0,255), // 0x5
     (Color) 0x0000, // 0x6
@@ -36,9 +36,9 @@ const Color BLACK_WHITE_PALETTE_GAME[] = {
 const Color BLACK_WHITE_PALETTE_TITLE[] = {
 
     (Color) MAKECOLOR(0,0,0), // 0x0
-    (Color) MAKECOLOR(255,255,255), // 0x1
-    (Color) MAKECOLOR(170,170,170), // 0x2
-    (Color) MAKECOLOR(85,85,85), // 0x3
+    (Color) MAKECOLOR(10,10,10), // 0x1
+    (Color) MAKECOLOR(111,111,111), // 0x2
+    (Color) MAKECOLOR(181,181,181), // 0x3
     (Color) MAKECOLOR(0,0,0), // 0x4
     (Color) MAKECOLOR(255,0,255), // 0x5
     (Color) 0x0000, // 0x6

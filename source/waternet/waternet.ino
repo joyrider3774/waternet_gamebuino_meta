@@ -32,13 +32,13 @@ void setup()
     // initialize the Gamebuino object
     gb.begin();
     gb.setFrameRate(frameRate);
-    setPalIndex(0);
     //has to be called first because initsound and initmusic read savestate sound to set intial flags
     initSaveState();
     initSound();
     initMusic();
     setMusicOn(isMusicOnSaveState());
     setSoundOn(isSoundOnSaveState());
+    setPalIndex(getActiveColorSaveState());
  }
 
 void loop()
@@ -72,10 +72,6 @@ void loop()
         case gsHelpSlide2:
             helpSlide2();
             break;
-        case gsInitHelpSlide3:
-        case gsHelpSlide3:
-            helpSlide3();
-            break;
         case gsHelpRotateSlide:
         case gsInitHelpRotateSlide:
             helpRotateSlide();
@@ -84,14 +80,6 @@ void loop()
         case gsHelpRotateSlide2:
             helpRotateSlide2();
             break;
-        case gsInitHelpRotateSlide3:
-        case gsHelpRotateSlide3:
-            helpRotateSlide3();
-            break;
-        case gsInitHelpRotateSlide4:
-        case gsHelpRotateSlide4:
-            helpRotateSlide4();
-            break;
         case gsInitHelpRotate:
         case gsHelpRotate:
             helpRotate();
@@ -99,10 +87,6 @@ void loop()
         case gsInitHelpRotate2:
         case gsHelpRotate2:
             helpRotate2();
-            break;
-        case gsInitHelpRotate3:
-        case gsHelpRotate3:
-            helpRotate3();
             break;
         case gsInitIntro:
         case gsIntro:

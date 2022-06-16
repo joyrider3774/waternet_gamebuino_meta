@@ -5,9 +5,10 @@
 #include "helperfuncs.h"
 #include "../res/selectortiles.h"
 
+constexpr uint8_t maxCursors = 4;
 constexpr uint8_t maxCursorFrameCount = (uint8_t)(10 * frameRate / 60);
 constexpr uint8_t cursorAnimCount = 2; //blink on & off
-constexpr uint8_t cursorNumTiles = 16; //for the max 2 cursors shown at once (on help screens) 
+constexpr uint8_t cursorNumTiles = maxCursors * 8; //for the max 4 cursors shown at once (on help screens) 
 
 uint8_t cursorFrameCount, cursorFrame, showCursor;
 uint8_t spritePos[cursorNumTiles][2];
@@ -49,11 +50,8 @@ uint8_t updateCursorFrame()
 void hideCursors()
 {
     //HIDE CURSOR SPRITES
-    //cursor 0
-    setCursorPos(0, 0, (gb.display.height() / 8) + 1);
-    
-    //cursor 1
-    setCursorPos(1, 0, (gb.display.height() / 8) + 1);
+    for (uint8_t i = 0; i < maxCursors; i++)
+        setCursorPos(i, 0, (gb.display.height() / 8) + 1);
     
     showCursor = 0;
 }
@@ -65,7 +63,7 @@ void showCursors()
 
 void setCursorPos(uint8_t cursorNr, uint8_t xPos, uint8_t yPos)
 {
-    if (cursorNr > 1)
+    if (cursorNr >= maxCursors)
         return;
 
     move_sprite((cursorNr<<3) + 0, ((xPos) << 3),  ((yPos - 1) << 3));
