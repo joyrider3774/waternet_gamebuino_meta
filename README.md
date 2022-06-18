@@ -51,15 +51,13 @@ You can find the music files i used for the game below:
 
 ## Photo's of the game running on real hardware
 
-<img src="images/hardware1.jpg"> <img src="images/hardware2.jpg"> <img src="images/hardware3.jpg"> <img src="images/hardware4.jpg"> <img src="images/hardware5.jpg">
-
 
 ## Credits
 Waternet game concept is based on the Net and Netslide game from the [Simon Tatham's Portable Puzzle Collection](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/),
 it's my own implementation of these 2 game concepts mixed into one game
 
 ### Libraries used
-* Gamebuino-META - [https://github.com/Gamebuino/Gamebuino-META)
+* Gamebuino-META - [https://github.com/Gamebuino/Gamebuino-META](https://github.com/Gamebuino/Gamebuino-META)
 
 ### Tools used:
 * Arduino ide / compiler - [https://www.arduino.cc/en/software](https://www.arduino.cc/en/software) 
