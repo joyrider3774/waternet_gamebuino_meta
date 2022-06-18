@@ -18,19 +18,19 @@ The aim of the game, in any game mode is always to connect all pipes so that wat
 
 ### Rotate Mode
 
-<img src="images/rotate-legend.png"> <img src="images/rotate-finish.png"> <img src="images/rotate.png">
+<img src="images/rotate-legend.png"> <img src="images/rotate.png">
 
 You need to connect all the pipes so water flows through them, by pressing the A button on a pipe, to rotate the single pipe.
 
 ### Slide Mode
 
-<img src="images/slide-legend.png"> <img src="images/slide-finish.png"> <img src="images/slide.png">
+<img src="images/slide-legend.png"> <img src="images/slide.png">
 
 You need to connect all the pipes so water flows through them, by pressing the A on the arrows of a row or column. The row or column will move all pipes in the direction the arrow is pointing at.
 
 ### Roslid Mode
 
-<img src="images/roslid-legend.png"> <img src="images/roslid-finish.png"> <img src="images/roslid-rotate.png"> <img src="images/roslid-slide.png">
+<img src="images/roslid-legend.png"> <img src="images/roslid.png">
 
 You need to connect all the pipes so water flows through them, by pressing the A on the arrows of a row or column. The row or column will move all pipes in the direction the arrow is pointing at. You can also press the A on a pipe, to rotate the single pipe. This is a combination Rotate and Slide mode.
 
