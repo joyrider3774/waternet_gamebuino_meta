@@ -8,8 +8,6 @@ constexpr uint8_t musTitle = 2;
 constexpr uint8_t musLevelClear = 3;
 constexpr uint8_t musAllLevelsClear = 4;
 
-constexpr uint8_t sfxSustain = (100 * frameRate) / 1000;
-
 void initSound();
 void SelectMusic(uint8_t musicFile, uint8_t force = 0);
 void initMusic();

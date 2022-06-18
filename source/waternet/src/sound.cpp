@@ -4,33 +4,33 @@
 
 #include "commonvars.h"
 #include "sound.h"
-#include "savestate.h"
 
 //I (joyrider3774) created the music in this tool : https://onlinesequencer.net
 
 uint8_t prev_music, music_on, sound_on;
-int8_t track = -1;
+int8_t track;
 
-constexpr uint8_t noteDuration = 50 * frameRate / 1000;
-constexpr uint8_t pause1 = 250U * frameRate / 1000;
-constexpr uint8_t pause2 = 100U * frameRate / 1000;
-constexpr uint8_t pause3 = 233U * frameRate / 1000;
-constexpr uint8_t pause4 = 216U * frameRate / 1000;
+constexpr uint8_t sfxSustain = 50;
+
+constexpr uint8_t pause1 = 15 * frameRate / 60;
+constexpr uint8_t pause2 = 6  * frameRate / 60;
+constexpr uint8_t pause3 = 14 * frameRate / 60;
+constexpr uint8_t pause4 = 13 * frameRate / 60;
+constexpr uint16_t trackEnd = 0;
 
 constexpr uint8_t NOTE_REST = 63;
-constexpr uint8_t NOTE_D6 = 4 << 7;
-constexpr uint8_t NOTE_DS6 = 5 << 7;
-constexpr uint8_t NOTE_E6 = 6 << 7;
-constexpr uint8_t NOTE_F6 = 7 << 7;
-constexpr uint8_t NOTE_C4 = 2 << 5;
-constexpr uint8_t NOTE_CS4 = 3 << 5;
-constexpr uint8_t NOTE_D4 = 4 << 5;
-constexpr uint8_t NOTE_DS4 = 5 << 5;
-constexpr uint8_t NOTE_E4 = 6 << 5;
-constexpr uint8_t NOTE_F4 = 7 << 5;
+constexpr uint8_t NOTE_D6 = 4 ;//+ 12 * 6;
+constexpr uint8_t NOTE_DS6 = 5 ;//+ 12 * 6;
+constexpr uint8_t NOTE_E6 = 6 ;//+ 12 * 6;
+constexpr uint8_t NOTE_F6 = 7 ;//+ 12 * 6;
+constexpr uint8_t NOTE_C4 = 2 ;//+ 12 * 4;
+constexpr uint8_t NOTE_CS4 = 3 ;//+ 12 * 4;
+constexpr uint8_t NOTE_D4 = 4 ;//+ 12 * 4;
+constexpr uint8_t NOTE_DS4 = 5 ;//+ 12 * 4;
+constexpr uint8_t NOTE_E4 = 6 ;//+ 12 * 4;
+constexpr uint8_t NOTE_F4 = 7 ;//+ 12 * 4;
 
-
-#define setNote(note, dur) (uint16_t) ((dur << 8) + (note << 2)) 
+#define setNote(note, dur) (((uint16_t)note<<2) + ((uint16_t)dur<<8))
 
 //https://onlinesequencer.net/2498607
 const uint16_t music_levelsCleared[] ={
@@ -81,7 +81,8 @@ const uint16_t music_levelsCleared[] ={
     setNote(NOTE_REST,pause4),
     setNote(NOTE_F6,pause4),
     setNote(NOTE_E6,pause4),
-    setNote(NOTE_F6,pause4)
+    setNote(NOTE_F6,pause4),
+    trackEnd
 };
 
 //https://onlinesequencer.net/2484974
@@ -93,7 +94,8 @@ const uint16_t music_won[] ={
   setNote(NOTE_DS6,pause2),
   setNote(NOTE_E6,pause2),
   setNote(NOTE_F6,pause2 << 2),
-  setNote(NOTE_REST,pause2)
+  setNote(NOTE_REST,pause2),
+  trackEnd
 };
 
 //https://onlinesequencer.net/2485064
@@ -198,7 +200,8 @@ const uint16_t music_game[] ={
     setNote(NOTE_CS4,pause3),
     setNote(NOTE_CS4,pause3),
     setNote(NOTE_REST,pause3),
-    setNote(NOTE_D4,pause3)
+    setNote(NOTE_D4,pause3),
+    trackEnd
 };
 
 //https://onlinesequencer.net/2484977
@@ -256,6 +259,7 @@ const uint16_t music_intro[] = {
     setNote(NOTE_E4,pause1),
     setNote(NOTE_D4,pause1 * 3),
     setNote(NOTE_REST,pause1 * 4),
+    trackEnd
 };
 
 void setMusicOn(uint8_t value)
@@ -303,7 +307,7 @@ uint8_t isSoundOn()
 
 void initSound()
 {
-    sound_on = 1;
+    sound_on = 0;
 }
 
 void SelectMusic(uint8_t musicFile, uint8_t force)
@@ -326,10 +330,10 @@ void SelectMusic(uint8_t musicFile, uint8_t force)
                 track = gb.sound.play(music_won);
                 break;
             case musAllLevelsClear:
-                track = gb.sound.play(music_levelsCleared);
+                track = gb.sound.play(music_levelsCleared, true);
                 break;
             case musGame:
-                track = gb.sound.play(music_game);
+                track = gb.sound.play(music_game, true);
                 break;
         }
     }
@@ -344,8 +348,9 @@ void playSound(uint16_t tone)
 
 void initMusic()
 {
-    music_on = isMusicOnSaveState();
+    music_on = 0;
     prev_music = 0;
+    track = -1;
 }
 
 void playGameMoveSound()
