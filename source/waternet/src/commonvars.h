@@ -63,7 +63,8 @@ constexpr uint8_t  mmCount = 4;
 constexpr uint8_t  opMusic = 0;
 constexpr uint8_t  opSound = 1;
 constexpr uint8_t  opColor = 2;
-constexpr uint8_t  opCount = 3;
+constexpr uint8_t  opColorInvert = 3;
+constexpr uint8_t  opCount = 4;
 
 constexpr uint8_t  tsMainMenu = 0;
 constexpr uint8_t  tsGameMode = 1;
@@ -80,8 +81,6 @@ constexpr uint8_t  arrowRight = 121;
 constexpr uint8_t  leftMenu = 118;
 
 constexpr uint8_t  frameRate = 15;
-
-constexpr uint8_t  maxColorSelections = 3;
 
 extern uint8_t startPos, menuPos, 
         maxLevel, selectedLevel, boardX, boardY, difficulty, 

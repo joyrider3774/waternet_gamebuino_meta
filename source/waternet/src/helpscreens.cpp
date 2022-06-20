@@ -5,6 +5,7 @@
 #include "printfuncs.h"
 #include "cursor.h"
 #include "sound.h"
+#include "palettes.h"
 
 uint8_t incY = 0;
 

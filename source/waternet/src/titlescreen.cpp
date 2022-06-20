@@ -8,6 +8,7 @@
 #include "printfuncs.h"
 #include "savestate.h"
 #include "level.h"
+#include "palettes.h"
 
 void drawTitleScreen()
 {
@@ -50,32 +51,21 @@ void drawTitleScreen()
             printMessage(6, 8, F("OPTIONS"));            
          
             if(isMusicOn())
-                printMessage(6, 10, F("MUSIC ON"));
+                printMessage(5, 10, F("MUSIC  ON"));
             else
-                printMessage(6, 10, F("MUSIC OFF"));
+                printMessage(5, 10, F("MUSIC  OFF"));
 
             if(isSoundOn())
-                printMessage(6, 11, F("SOUND ON"));
+                printMessage(5, 11, F("SOUND  ON"));
             else
-                printMessage(6, 11, F("SOUND OFF"));
+                printMessage(5, 11, F("SOUND  OFF"));
             
-
-            uint8_t i = getPalIndex();
-            switch(i)
-            {
-                case 0:
-                    printMessage(6, 12, F("COLOR GB"));
-                    break;
-                case 1:
-                    printMessage(6, 12, F("COLOR BW"));
-                    break;
-                case 2:
-                    printMessage(6, 12, F("COLOR GBC"));
-                    break;
-                case 3:
-                    printMessage(6, 12, F("COLOR RED"));
-                    break;
-            }
+            printMessage(5, 12, getPaletteName());
+            
+            if(getPalInverse())
+                printMessage(5, 13, F("INVERT ON"));
+            else
+                printMessage(5, 13, F("INVERT OFF"));
             break;
     }
 
@@ -92,7 +82,7 @@ void drawTitleScreen()
             set_bkg_tile_xy(5, 8 + difficulty, leftMenu);
             break;
         case tsOptions:
-            set_bkg_tile_xy(5, 10 + option, leftMenu);
+            set_bkg_tile_xy(4, 10 + option, leftMenu);
             break;
     }
 }
@@ -241,14 +231,18 @@ void titleScreen()
                             setSoundOnSaveState(isSoundOn());
                             needRedraw = 1;
                             break;
+                         case opColorInvert:
+                            setPalInverse(!getPalInverse());
+                            setInverseColorSaveState(getPalInverse());
+                            needRedraw = 1;
+                            break;
                         case opColor:
                             uint8_t i = getPalIndex();
-                            if (i < maxColorSelections)
+                            if (i < getMaxPalettes())
                                 i++;
                             else
                                 i = 0;
                             setPalIndex(i);
-                            setPaletteTitle();
                             setActiveColorSaveState(i);
                             needRedraw = 1;
                             break;

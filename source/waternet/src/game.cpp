@@ -8,6 +8,7 @@
 #include "printfuncs.h"
 #include "cursor.h"
 #include "savestate.h"
+#include "palettes.h"
 
 uint8_t paused, wasMusicOn, wasSoundOn,redrawLevelDoneBit;
 

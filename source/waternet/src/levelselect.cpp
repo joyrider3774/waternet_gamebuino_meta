@@ -6,6 +6,7 @@
 #include "savestate.h"
 #include "sound.h"
 #include "level.h"
+#include "palettes.h"
 
 
 void drawLevelSelect() 

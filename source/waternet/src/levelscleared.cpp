@@ -5,6 +5,7 @@
 #include "printfuncs.h"
 #include "sound.h"
 #include "level.h"
+#include "palettes.h"
 
 #include "../res/congratsscreentiles.h"
 #include "../res/congratsscreenmap.h"

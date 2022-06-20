@@ -4,6 +4,7 @@
 #include <string.h>
 #include <Gamebuino-Meta.h>
 
+#include "src\palettes.h"
 #include "src\commonvars.h"
 #include "src\intro.h"
 #include "src\levelselect.h"
@@ -38,6 +39,7 @@ void setup()
     initMusic();
     setMusicOn(isMusicOnSaveState());
     setSoundOn(isSoundOnSaveState());
+    setPalInverse(getInverseColorSaveState());
     setPalIndex(getActiveColorSaveState());
  }
 

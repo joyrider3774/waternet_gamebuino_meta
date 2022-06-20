@@ -3,6 +3,7 @@
 #include "helperfuncs.h"
 #include "commonvars.h"
 #include "printfuncs.h"
+#include "palettes.h"
 
 #include "../res/titlescreenmap.h"
 #include "../res/blocktiles.h"
