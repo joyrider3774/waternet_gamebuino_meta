@@ -46,7 +46,7 @@ void setup()
 void loop()
 {
     gb.waitForUpdate();
-       
+
     //gamestate handling
     switch (gameState)
     {

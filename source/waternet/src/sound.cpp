@@ -10,7 +10,7 @@
 uint8_t prev_music, music_on, sound_on;
 int8_t track;
 
-constexpr uint8_t sfxSustain = 50;
+constexpr uint8_t sfxSustain = 100 * 15 / frameRate;
 
 constexpr uint8_t pause1 = 15 * frameRate / 60;
 constexpr uint8_t pause2 = 6  * frameRate / 60;
@@ -19,18 +19,20 @@ constexpr uint8_t pause4 = 13 * frameRate / 60;
 constexpr uint16_t trackEnd = 0;
 
 constexpr uint8_t NOTE_REST = 63;
-constexpr uint8_t NOTE_D6 = 4 ;//+ 12 * 6;
-constexpr uint8_t NOTE_DS6 = 5 ;//+ 12 * 6;
-constexpr uint8_t NOTE_E6 = 6 ;//+ 12 * 6;
-constexpr uint8_t NOTE_F6 = 7 ;//+ 12 * 6;
-constexpr uint8_t NOTE_C4 = 2 ;//+ 12 * 4;
-constexpr uint8_t NOTE_CS4 = 3 ;//+ 12 * 4;
-constexpr uint8_t NOTE_D4 = 4 ;//+ 12 * 4;
-constexpr uint8_t NOTE_DS4 = 5 ;//+ 12 * 4;
-constexpr uint8_t NOTE_E4 = 6 ;//+ 12 * 4;
-constexpr uint8_t NOTE_F4 = 7 ;//+ 12 * 4;
+constexpr uint8_t NOTE_D6 = 4 + 24;
+constexpr uint8_t NOTE_DS6 = 5 + 24;
+constexpr uint8_t NOTE_E6 = 6 + 24;
+constexpr uint8_t NOTE_F6 = 7 + 24;
+constexpr uint8_t NOTE_C4 = 2;
+constexpr uint8_t NOTE_CS4 = 3;
+constexpr uint8_t NOTE_D4 = 4;
+constexpr uint8_t NOTE_DS4 = 5;
+constexpr uint8_t NOTE_E4 = 6;
+constexpr uint8_t NOTE_F4 = 7;
 
-#define setNote(note, dur) (((uint16_t)note<<2) + ((uint16_t)dur<<8))
+
+
+#define setNote(note, dur) ((uint16_t)note<<2U) + (((uint16_t)dur)<<8U)
 
 //https://onlinesequencer.net/2498607
 const uint16_t music_levelsCleared[] ={
@@ -282,11 +284,7 @@ void setMusicOn(uint8_t value)
     }
     else
     {
-        if(track != -1)
-        {
-            gb.sound.stop(track);
-        }
-
+        gb.sound.stop(track);
     }
 }
 
@@ -315,11 +313,7 @@ void SelectMusic(uint8_t musicFile, uint8_t force)
     if (((prev_music != musicFile) || force) && music_on)
     {
         prev_music = musicFile;
-        if (track != -1)
-        {
-            gb.sound.stop(track);
-            track = -1;
-        }
+        gb.sound.stop(track);
 
         switch (musicFile) 
         {
@@ -360,7 +354,7 @@ void playGameMoveSound()
 
 void playErrorSound()
 {
-   playSound(300);
+    playSound(210);
 }
 
 void playMenuSelectSound()
