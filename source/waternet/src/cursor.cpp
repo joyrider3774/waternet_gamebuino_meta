@@ -12,6 +12,7 @@ constexpr uint8_t cursorNumTiles = maxCursors * 8; //for the max 4 cursors shown
 
 uint8_t cursorFrameCount, cursorFrame, showCursor;
 uint8_t spritePos[cursorNumTiles][2];
+uint8_t disableBlinking = 0;
 
 void move_sprite(uint8_t sprite, uint8_t x, uint8_t y)
 {
@@ -22,10 +23,11 @@ void move_sprite(uint8_t sprite, uint8_t x, uint8_t y)
 void drawCursors()
 {
     if((showCursor == 0) || (cursorFrame & 1)) // 2nd or to add blink effect, it will skip drawing if bit 1 is set
-        return;
+         return;
     
-    for (uint8_t i=0; i<cursorNumTiles; i++)
-        if (spritePos[i][1] < gb.display.height())
+    uint8_t height = gb.display.height();
+    for (uint8_t i=0; i != cursorNumTiles; i++)
+        if (spritePos[i][1] < height)
         {
             selectorTiles.setFrame(i%8);
             gb.display.drawImage(spritePos[i][0], spritePos[i][1], selectorTiles);
@@ -35,12 +37,15 @@ void drawCursors()
 //returns 1 if cursor has changed / needs redraw
 uint8_t updateCursorFrame()
 {
-    cursorFrameCount++;
-    if (cursorFrameCount >= maxCursorFrameCount)
+    if (disableBlinking || (showCursor == 0))
+        return 0;
+
+    ++cursorFrameCount;
+    if (cursorFrameCount == maxCursorFrameCount)
     {        
-        cursorFrame++;
         cursorFrameCount = 0;
-        if (cursorFrame >= cursorAnimCount)
+        ++cursorFrame;
+        if (cursorFrame == cursorAnimCount)
             cursorFrame = 0;
         return 1; 
     }
