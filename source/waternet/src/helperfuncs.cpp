@@ -16,11 +16,8 @@ uint32_t getRandomSeed()
 
 void set_bkg_tile_xy(uint8_t x, uint8_t y, uint8_t tile)
 {
-  if(currentTiles != nullptr)
-  {
-    currentTiles->setFrame(tile);
-    gb.display.drawImage(x * 8, y * 8, *currentTiles);
-  }
+  currentTiles->setFrame(tile);
+  gb.display.drawImage(x * 8, y * 8, *currentTiles);
 }
 
 void set_bkg_data(Image *tiles)
