@@ -91,17 +91,14 @@ void printDebugCpuRamLoad()
         
         //get cpuload
         char debuginfo[16];
-        uint8_t load = gb.getCpuLoad();
-        uint16_t ram = gb.getFreeRam();
-        
-        snprintf(debuginfo, sizeof(debuginfo), "C:%3d R:%5d", load, ram);
+        sprintf(debuginfo, "C:%3d R:%5d", gb.getCpuLoad(), gb.getFreeRam());
 
         //get digits
         size_t len = strlen(debuginfo);
 
         //clear space for max 3 digits (i assume 100 is max or at least 999)
         gb.display.setColor(INDEX_BLACK);
-        gb.display.fillRect(0, 0, len*8, 8);
+        gb.display.fillRect(0, 0, 13*8, 8);
     
         //print debug info
         for (uint8_t c = 0; c < len; c++)
