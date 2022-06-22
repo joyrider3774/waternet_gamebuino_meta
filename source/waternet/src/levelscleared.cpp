@@ -48,7 +48,7 @@ void levelsCleared()
         initLevelsCleared();
         gameState -= gsInitDiff;
     }
-       
+
     if (gb.buttons.released(BUTTON_A) || 
         gb.buttons.released(BUTTON_B)) 
     {

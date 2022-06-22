@@ -3,7 +3,77 @@
 #include <Gamebuino-Meta.h>
 #include "level.h"
 #include "commonvars.h"
+#include "helperfuncs.h"
 
+void drawLevel()
+{
+    drawLevel(0,0,maxBoardBgWidth, maxBoardBgHeight);
+}
+
+void drawLevel(int8_t x1, int8_t y1, int8_t xend, int8_t yend )
+{ 
+    for (uint8_t y = max(y1, 0); y != min(yend, maxBoardBgHeight); y++)
+    {
+        for(uint8_t x = max(x1, 0); x != min(xend, maxBoardBgWidth); x++)
+        {
+            //BACKGROUND
+
+            //normal background tile not on corners
+            uint8_t tile = 49;
+            //top left corner
+            if((y == 0) && (x == 0))
+                tile = 54;
+            //top right corner
+            else if ((y == 0) && ( x == maxBoardBgWidth -1))
+                tile = 55;
+            //bottom right corner
+            else if ((y == maxBoardBgHeight -1) && ( x == maxBoardBgWidth -1))
+                tile = 56;
+            //bottom left corner
+            else if ((y == maxBoardBgHeight -1) && ( x == 0))
+                tile =  57;
+            //top corner
+            else if (y == 0)
+                tile = 50;
+            //bottom corner
+            else if (y == maxBoardBgHeight - 1)
+                tile = 52;
+            //left corner
+            else if (x == 0)
+                tile = 53;
+            //right corner
+            else if (x == maxBoardBgWidth -1)
+                tile = 51;           
+            
+            // LEVEL
+
+            //special case in case of sliding mode to draw the arrows
+            else if ((gameMode != gmRotate) && (x >=boardX-1) && (y >= boardY - 1) && (x <= boardX + boardWidth) && (y <= boardY + boardHeight) &&
+                ((x == boardX-1) || (x == boardX + boardWidth) || (y == boardY -1) || (y == boardY + boardHeight)))
+            {
+                //left
+                if ((x == boardX-1) && (y != boardY -1) && (y != boardY + boardHeight))
+                    tile = arrowRight;
+                //right
+                else if ((x == boardX + boardWidth) && (y != boardY -1) && (y != boardY + boardHeight))
+                    tile = arrowLeft;
+                //top
+                else if ((y == boardY-1) && (x != boardX -1) && (x != boardX + boardWidth))
+                    tile = arrowDown;
+                //bottom
+                else if ((y == boardY + boardHeight) && (x != boardX -1) && (x != boardX + boardWidth))
+                    tile = arrowUp;
+            }
+            //draw the level part if in correct position so we don't draw background twice
+            else if ((x >= boardX) && (y >= boardY ) && (y < boardY + boardHeight) && (x < boardX + boardWidth))
+            {
+                tile = level[(y-boardY) * boardWidth + (x-boardX)];
+            }
+            //draw the tile
+            set_bkg_tile_xy(x, y, tile);
+        }
+    }
+}
 
 void moveBlockDown(uint8_t aTile)
 {

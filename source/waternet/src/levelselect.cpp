@@ -11,8 +11,8 @@
 
 void drawLevelSelect() 
 {
-    //gb.display.clear(INDEX_BLACK);
-    gb.display.drawImage(0, 0, gameBackgroundMap);
+    gb.display.setColor(INDEX_BLACK);
+    gb.display.fillRect(maxBoardBgWidth * 8, 0, gb.display.width() - (maxBoardBgWidth * 8), gb.display.height());
     //LEVEL:
     printMessage(maxBoardBgWidth  , 0 , F("LEVEL:"));
     
@@ -34,32 +34,7 @@ void drawLevelSelect()
     else
         printMessage(maxBoardBgWidth , 2 , F("OPEN"));
     
-    //Draw arrows for vertical / horizontal movement
-    if(gameMode != gmRotate)
-    {
-        for (uint8_t x = 0; x != boardWidth; x++)
-        {
-            set_bkg_tile_xy(boardX + x , boardY -1 , arrowDown);
-            set_bkg_tile_xy(boardX + x , boardY + boardHeight , arrowUp);
-        }
-
-        for (uint8_t y = 0; y != boardHeight; y++)
-        {
-            set_bkg_tile_xy(boardX - 1 , boardY + y , arrowRight);
-            set_bkg_tile_xy(boardX + boardWidth , boardY + y , arrowLeft);
-        }
-    }
-
-    uint16_t i16 = 0; 
-    for (uint8_t y = 0; y < boardHeight; y++)
-    {
-        for(uint8_t x = 0; x <boardWidth; x++)
-        {
-            set_bkg_tile_xy(boardX  + x , boardY  + y, level[i16 + x]);
-        }
-        i16 += boardWidth;
-    }
-
+    drawLevel();
 
 }
 

@@ -10,26 +10,32 @@
 #include "savestate.h"
 #include "palettes.h"
 
-uint8_t paused, wasMusicOn, wasSoundOn,redrawLevelDoneBit;
+uint8_t paused, wasMusicOn, wasSoundOn,DrawLevelDoneBit, nextDrawWhat, levelDoneFrames;
+constexpr uint8_t drwNone = 0;
+constexpr uint8_t drwMoves = 1;
+constexpr uint8_t drwUi = 2;
+constexpr uint8_t drwLevel = 4;
+constexpr uint8_t drwLevelDone = 8;
+constexpr uint8_t drwPause = 16;
+constexpr uint8_t drwPartialLevel = 32;
+constexpr uint8_t maxLevelDoneFrames = 8 * frameRate / 15;
 
-void drawGame()
+
+uint8_t drawGame(uint8_t drawWhat)
 {
+    if (drawWhat == drwNone)
+        return drwNone;
+
     //background
-    if(!paused && !redrawLevelDoneBit)
+    if(drawWhat & drwUi)
     {
-        //gb.display.clear(INDEX_BLACK);
-        gb.display.drawImage(0, 0, gameBackgroundMap);
+        gb.display.setColor(INDEX_BLACK);
+        gb.display.fillRect(maxBoardBgWidth * 8, 0, gb.display.width() - (maxBoardBgWidth * 8), gb.display.height());
          //LEVEL:
         printMessage(maxBoardBgWidth, 0, F("LEVEL:"));
         
         //[LEVEL NR] 2 chars
         printNumber(maxBoardBgWidth + 4, 1, selectedLevel, 2);
-        
-        
-        //MOVES:
-        printMessage(maxBoardBgWidth, 2, F("MOVES:"));
-
-        printNumber(maxBoardBgWidth + 1, 3, moves, 5); 
         
         //A:XXXXXX (XXXXXX="ROTATE" or XXXXXX="SLIDE " or XXXXXX="ROSLID")
         switch (gameMode)
@@ -52,34 +58,57 @@ void drawGame()
         printMessage(maxBoardBgWidth, 6, F("b:"));
         printMessage(maxBoardBgWidth, 7, F("BACK"));
 
-        //Draw arrows for vertical / horizontal movement
-        if(gameMode != gmRotate)
-        {
-            
-            for (uint8_t x = 0; x != boardWidth; x++)
-            {
-                set_bkg_tile_xy(boardX + x, boardY -1, arrowDown);
-                set_bkg_tile_xy(boardX + x, boardY + boardHeight, arrowUp);
-            }
-
-            for (uint8_t y = 0; y != boardHeight; y++)
-            {
-                set_bkg_tile_xy(boardX - 1, boardY + y, arrowRight);
-                set_bkg_tile_xy(boardX + boardWidth, boardY + y, arrowLeft);
-            }
-        }
-
-        //level
-        uint16_t i16 = 0; 
-        for (uint8_t y = 0; y < boardHeight; y++)
-        {
-            for(uint8_t x = 0; x <boardWidth; x++)
-            {
-                set_bkg_tile_xy(boardX +x , boardY + y, level[i16 + x]);
-            }
-            i16+=boardWidth;
-        }          
+        //MOVES:
+        printMessage(maxBoardBgWidth, 2, F("MOVES:"));
     }
+
+    if(drawWhat & drwMoves)
+    {
+        if(!(drawWhat & drwUi))
+        {
+             gb.display.setColor(INDEX_BLACK);
+             gb.display.fillRect(gb.display.width() - (5*8), 3 * 8, 5*8, 8);
+        }
+        printNumber(maxBoardBgWidth + 1, 3, moves, 5);
+    }
+
+    if(drawWhat & drwLevel)
+    {
+        drawLevel();
+        drawCursors();
+    }
+
+    //used when redrawing cursor stuff for example (not full background)
+    if((drawWhat & drwPartialLevel) && !(drawWhat & drwLevel))
+    {
+        drawLevel(boardX -1, boardY -1, boardX + boardWidth + 1, boardY + boardHeight + 1);
+        drawCursors();
+    }
+    
+    if(drawWhat & drwLevelDone)
+    {
+        gb.display.setColor(INDEX_BLACK);
+        gb.display.fillRect(((16 - 13) >> 1) * 8, ((maxBoardBgHeight >> 1) - 2) * 8, 14*8, 5*8);
+        printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) - 2, F("[************]"));
+        printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) - 1, F("| LEVEL DONE +"));
+        printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1)    , F("|            +"));
+        printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) + 1, F("| a CONTINUE +"));
+        printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) + 2, F("<############>"));
+    }
+
+    if(drawWhat & drwPause)
+    {
+        gb.display.setColor(INDEX_BLACK);
+        gb.display.fillRect(0, ((maxBoardBgHeight >> 1) - 3) * 8, 16*8, 6*8);
+        printMessage(0, (maxBoardBgHeight >> 1) - 3, F("[**************]"));
+        printMessage(0, (maxBoardBgHeight >> 1) - 2, F("|PLEASE CONFIRM+")); 
+        printMessage(0, (maxBoardBgHeight >> 1) - 1, F("|              +")); 
+        printMessage(0, (maxBoardBgHeight >> 1) + 0, F("|   a PLAY     +"));
+        printMessage(0, (maxBoardBgHeight >> 1) + 1, F("|   b TO QUIT  +"));
+        printMessage(0, (maxBoardBgHeight >> 1) + 2, F("<##############>"));
+    }
+    
+    return drwNone;
 }
 
 void initGame()
@@ -93,25 +122,21 @@ void initGame()
     initCursors();
     setCursorPos(0, boardX + selectionX, boardY + selectionY);
     showCursors();
-    redrawLevelDoneBit = 0;
+    levelDoneFrames = 0;
+    levelDone = 0;
+    nextDrawWhat = drwUi + drwLevel + drwMoves;
 }
 
 void doPause()
 {
     paused = 1;
+    playMenuBackSound();
     wasSoundOn = isSoundOn();
     wasMusicOn = isMusicOn();
     setMusicOn(0);
     setSoundOn(0);
     hideCursors();
-    gb.display.setColor(INDEX_BLACK);
-    gb.display.fillRect(0, ((maxBoardBgHeight >> 1) - 3) * 8, 16*8, 6*8);
-    printMessage(0, (maxBoardBgHeight >> 1) - 3, F("[**************]"));
-    printMessage(0, (maxBoardBgHeight >> 1) - 2, F("|PLEASE CONFIRM+")); 
-    printMessage(0, (maxBoardBgHeight >> 1) - 1, F("|              +")); 
-    printMessage(0, (maxBoardBgHeight >> 1) + 0, F("|   a PLAY     +"));
-    printMessage(0, (maxBoardBgHeight >> 1) + 1, F("|   b TO QUIT  +"));
-    printMessage(0, (maxBoardBgHeight >> 1) + 2, F("<##############>"));   
+    nextDrawWhat |= drwPause;
 }
 
 void doUnPause()
@@ -121,7 +146,7 @@ void doUnPause()
     setSoundOn(wasSoundOn);
     setCursorPos(0, boardX + selectionX, boardY + selectionY);
     showCursors();
-    needRedraw = 1;
+    nextDrawWhat |= drwUi + drwLevel + drwMoves;
 }
 
 void game()
@@ -132,14 +157,22 @@ void game()
         gameState -= gsInitDiff;
     }
 
-    if(needRedraw)
+    nextDrawWhat = drawGame(nextDrawWhat);
+    
+    if(levelDone)
     {
-        drawGame();
-        drawCursors();
-        needRedraw = 0;
+        if(levelDoneFrames > 1)
+            --levelDoneFrames;
+        else if (levelDoneFrames == 1)
+        {
+            nextDrawWhat |= drwLevelDone;
+            --levelDoneFrames;
+        }
     }
-       
-    needRedraw = updateCursorFrame();
+    //don't redraw level anymore based on cursors if level is done
+    else
+        if (updateCursorFrame())
+            nextDrawWhat |= drwPartialLevel;
 
     if (gb.buttons.released(BUTTON_DOWN))
     {
@@ -148,17 +181,12 @@ void game()
             playGameMoveSound();
             //if not touching border on bottom
             if (selectionY + 1 < boardHeight + posAdd)
-            {
                 selectionY += 1;
-                needRedraw = 1;
-            }
             else
             //set to border on top
-            {
                 selectionY = -posAdd;
-                needRedraw = 1;
-            }
             setCursorPos(0, boardX + selectionX, boardY + selectionY);
+            nextDrawWhat |= drwPartialLevel;
         }
     } 
 
@@ -169,17 +197,12 @@ void game()
             //if not touching border on top
             playGameMoveSound();
             if (selectionY -1 >= -posAdd)
-            {
                 selectionY -= 1;
-                needRedraw = 1;
-            }
             else
             //set to border on bottom
-            {
                 selectionY = boardHeight -1 +posAdd;
-                needRedraw = 1;
-            }
             setCursorPos(0, boardX + selectionX, boardY + selectionY);
+            nextDrawWhat |= drwPartialLevel;
         }
     }
 
@@ -190,17 +213,12 @@ void game()
             playGameMoveSound();
             //if not touching border on right
             if(selectionX + 1 < boardWidth + posAdd)
-            {
                 selectionX += 1;
-                needRedraw = 1;
-            }
             else
             //set to border on left
-            {
                 selectionX = -posAdd;
-                needRedraw = 1;
-            }
             setCursorPos(0, boardX + selectionX, boardY + selectionY);
+            nextDrawWhat |= drwPartialLevel;
         }
     }
 
@@ -211,17 +229,12 @@ void game()
             playGameMoveSound();
             //if not touching border on left
             if( selectionX -1 >= -posAdd)
-            {
                 selectionX -= 1;
-                needRedraw = 1;
-            }
             //set to border on right
             else
-            {
                 selectionX = boardWidth -1 + posAdd;
-                needRedraw = 1;
-            }
             setCursorPos(0, boardX + selectionX, boardY + selectionY);
+            nextDrawWhat |= drwPartialLevel;
         }
     }
 
@@ -231,7 +244,6 @@ void game()
         {
             doUnPause();
             playMenuAcknowlege();
-            needRedraw = 1;
         }
         else
         {
@@ -244,8 +256,9 @@ void game()
                     {
                         rotateBlock((uint8_t)selectionX + ((uint8_t)selectionY * boardWidth));
                         moves++;
+                        updateConnected();
                         playGameAction();
-                        needRedraw = 1;
+                        nextDrawWhat |= (drwPartialLevel+drwMoves);
                     }
                     else
                     {
@@ -260,8 +273,9 @@ void game()
                         {
                             moveBlockDown((uint8_t)selectionX + ((uint8_t)(selectionY+1) * boardWidth));
                             moves++;
+                            updateConnected();
                             playGameAction();
-                            needRedraw = 1;
+                            nextDrawWhat |= (drwPartialLevel+drwMoves);
                         }
                         else
                         {
@@ -269,8 +283,9 @@ void game()
                             {
                                 moveBlockUp((uint8_t)selectionX + ((uint8_t)(selectionY-1) * boardWidth));
                                 moves++;
+                                updateConnected();
                                 playGameAction();
-                                needRedraw = 1;
+                                nextDrawWhat |= (drwPartialLevel+drwMoves);
                             }
                         }
                     }
@@ -282,17 +297,19 @@ void game()
                             {
                                 moveBlockRight((uint8_t)(selectionX + 1) + ((uint8_t)selectionY * boardWidth));
                                 moves++;
+                                updateConnected();
                                 playGameAction();
-                                needRedraw = 1;
+                                nextDrawWhat |= (drwPartialLevel+drwMoves);
                             }
                             else
                             {
                                 if (selectionX == boardWidth)
                                 {
                                     moveBlockLeft( (uint8_t)(selectionX - 1) + ((uint8_t)selectionY * boardWidth));
+                                    updateConnected();
                                     moves++;
                                     playGameAction();
-                                    needRedraw = 1;
+                                    nextDrawWhat |= (drwPartialLevel+drwMoves);
                                 }
                             }
                         }
@@ -302,59 +319,49 @@ void game()
                         }
                     }
                 }
-                updateConnected();
-                levelDone = isLevelDone();
+                levelDone = isLevelDone(); 
                 if(levelDone)
                 {
-                    //update level one last time so we are at final state
-                    //as it won't be updated anymore as long as level done is displayed
-                    //1 forces level to be drawn (only) one last time the other call uses levelDone                      
-                    drawGame();
+                    levelDoneFrames = maxLevelDoneFrames;
                     SelectMusic(musLevelClear);
                     //hide cursor it's only sprite we use
                     hideCursors();
-                    gb.display.setColor(INDEX_BLACK);
-                    gb.display.fillRect(((16 - 13) >> 1) * 8, ((maxBoardBgHeight >> 1) - 2) * 8, 14*8, 5*8);
-                    printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) - 2, F("[************]"));
-                    printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) - 1, F("| LEVEL DONE +"));
-                    printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1)    , F("|            +"));
-                    printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) + 1, F("| a CONTINUE +"));
-                    printMessage(((16 - 13) >> 1), (maxBoardBgHeight >> 1) + 2, F("<############>"));
-                    redrawLevelDoneBit = 1; 
                 }
             }
             else
             {
-                redrawLevelDoneBit = 0;
-                //goto next level
-                if (difficulty == diffRandom)
+                if (levelDoneFrames == 0)
                 {
-                    //ned new seed based on time
-                    randomSeedGame = getRandomSeed();
-                    initLevel(randomSeedGame);
-                    SelectMusic(musGame);
-                    //show cursor again (it's actually to early but i'm not fixing that)
-                    setCursorPos(0, boardX + selectionX, boardY + selectionY);
-                    showCursors();
-                    needRedraw = 1;
-                }
-                else
-                {   
-                    //goto next level if any
-                    if (selectedLevel < maxLevel)
+                    //goto next level
+                    if (difficulty == diffRandom)
                     {
-                        selectedLevel++;
-                        unlockLevel(gameMode, difficulty, selectedLevel-1);
+                        //ned new seed based on time
+                        randomSeedGame = getRandomSeed();
                         initLevel(randomSeedGame);
                         SelectMusic(musGame);
                         //show cursor again (it's actually to early but i'm not fixing that)
                         setCursorPos(0, boardX + selectionX, boardY + selectionY);
                         showCursors();
-                        needRedraw = 1;
+                        nextDrawWhat = drwUi + drwLevel + drwMoves;
                     }
-                    else //Goto some congrats screen
-                    {
-                        gameState = gsInitLevelsCleared;                         
+                    else
+                    {   
+                        //goto next level if any
+                        if (selectedLevel < maxLevel)
+                        {
+                            selectedLevel++;
+                            unlockLevel(gameMode, difficulty, selectedLevel-1);
+                            initLevel(randomSeedGame);
+                            SelectMusic(musGame);
+                            //show cursor again (it's actually to early but i'm not fixing that)
+                            setCursorPos(0, boardX + selectionX, boardY + selectionY);
+                            showCursors();
+                            nextDrawWhat = drwUi + drwLevel + drwMoves;
+                        }
+                        else //Goto some congrats screen
+                        {
+                            gameState = gsInitLevelsCleared;
+                        }
                     }
                 }
             }
@@ -367,9 +374,7 @@ void game()
         {
             if(!paused)
             {
-                playMenuBackSound();
                 doPause();
-                needRedraw = 1;
             }
             else
             {

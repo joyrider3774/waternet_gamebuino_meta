@@ -80,7 +80,7 @@ constexpr uint8_t  arrowLeft = 123;
 constexpr uint8_t  arrowRight = 121;
 constexpr uint8_t  leftMenu = 118;
 
-constexpr uint8_t  frameRate = 15;
+constexpr uint8_t  frameRate = 18;
 
 extern uint8_t startPos, menuPos, 
         maxLevel, selectedLevel, boardX, boardY, difficulty, 

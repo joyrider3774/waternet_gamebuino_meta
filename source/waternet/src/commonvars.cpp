@@ -8,14 +8,13 @@
 #include "../res/selectortiles.h"
 #include "../res/titlescreenmap.h"
 #include "../res/fulltitlescreenmap.h"
-#include "../res/gamebackgroundmap.h"
 
 uint8_t startPos, menuPos, 
         maxLevel, selectedLevel, boardX, boardY, difficulty, 
         gameState, boardWidth, boardHeight, boardSize,
         levelDone, titleStep, gameMode, posAdd, debugMode, 
         mainMenu, option, needRedraw;
-        
+ 
 int16_t selectionX, selectionY;
 uint16_t moves;
 unsigned char level[maxBoardSize];
@@ -27,4 +26,3 @@ Image congratsMap(CONGRATSSCREENMAP_DATA);
 Image selectorTiles(SELECTORTILES_DATA);
 Image congratsScreenTiles(CONGRATSTILES_DATA);
 Image fullTitlescreenMap(FULLTITLESCREENMAP_DATA);
-Image gameBackgroundMap(GAMEBACKGROUNDMAP_DATA);
