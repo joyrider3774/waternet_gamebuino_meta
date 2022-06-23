@@ -104,5 +104,6 @@ const __FlashStringHelper* getPaletteName()
         case 3: return F("COLOR  RED");
         case 4: return F("COLOR  BLUE");  
         case 5: return F("COLOR  FIRE");
+        default: return F("");
   }   
 }

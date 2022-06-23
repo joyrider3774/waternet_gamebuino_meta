@@ -87,7 +87,7 @@ uint8_t unPackLevelLock(uint8_t mode, uint8_t diff)
             
 uint8_t validateSaveState()
 {
-    uint8_t levelsUnlocked = 0;
+    uint8_t levelsUnlocked;
     for (uint8_t j=0; j<gmCount; j++)
     {
         for (uint8_t i=0; i<diffCount; i++)

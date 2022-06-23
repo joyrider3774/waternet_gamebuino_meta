@@ -379,8 +379,7 @@ void updateConnected()
     if (level[startPos] > 15)
        level[startPos] += 16;
     else 
-        if (level[startPos] < 16)
-            level[startPos] += 32;
+       level[startPos] += 32;
 }
 
 void generateLevel()
@@ -390,10 +389,8 @@ void generateLevel()
     uint8_t cc = 0;
     uint8_t currentPoint = 0;
     uint8_t visitedRooms = 1;
-    uint8_t tmp, tmp2;
+    uint8_t tmp2;
     uint8_t selectedNeighbour;
-    uint8_t neighboursFound;
-    uint8_t lookUpX, lookUpY;
     uint8_t rnd;
     //generate a lookup table so we don't have to use modulus or divide constantly
     //generateLookupTable(boardWidth, boardHeight);
@@ -403,11 +400,10 @@ void generateLevel()
 
     while (visitedRooms != boardSize)
     {
-        neighboursFound = 0;
-        lookUpX = currentPoint % boardWidth;
-        lookUpY = currentPoint / boardWidth;
-
-        tmp  = currentPoint+1; 
+        uint8_t neighboursFound = 0;
+        uint8_t lookUpX = currentPoint % boardWidth;
+        uint8_t lookUpY = currentPoint / boardWidth;
+        uint8_t tmp  = currentPoint+1; 
         //tile has neighbour to the right which we did not handle yet
         if ((level[tmp] == 0xfu) && ( lookUpX + 1 < boardWidth))
             neighbours[neighboursFound++] = tmp;
