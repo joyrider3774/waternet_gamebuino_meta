@@ -40,6 +40,8 @@ Graphics (tiles), i converted using the [Gimp Image Editor](https://www.gimp.org
 
 ## Sound
 
+Sound are just simple tones that play quickly 
+
 ## Music
 Music was made using [Online Sequencer](https://onlinesequencer.net/), i created single channel, non mixed music files and later converted this music to an array storing the frequencies of notes to be used on the Gamebuino-META. I got [this idea](https://www.gamedeveloper.com/programming/making-a-game-boy-game-in-2017-a-quot-sheep-it-up-quot-post-mortem-part-2-2-) from the [sheep it up](https://gamejolt.com/games/sheepitup/267335) game developed by Dr. Ludos. He stored the frequencies to be used for the music notes in a array. So i used the same system and all i had todo was convert the music from onlinesequencer i made to such array (by hand) as well.
 
@@ -51,6 +53,10 @@ You can find the music files i used for the game below:
 
 ## Photo's of the game running on real hardware
 
+<img src="images/hardware1.jpg"> <img src="images/hardware2.jpg">
+<img src="images/hardware3.jpg"> <img src="images/hardware4.jpg">
+<img src="images/hardware5.jpg"> <img src="images/hardware6.jpg">
+<img src="images/hardware7.jpg">
 
 ## Credits
 Waternet game concept is based on the Net and Netslide game from the [Simon Tatham's Portable Puzzle Collection](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/),
