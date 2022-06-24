@@ -72,14 +72,12 @@ jobs:
       #prepare artificat folder 
       - name: prepare artifact
         run: |
-          mkdir release 
-          copy waternet.ino.hex release\waternet.hex
-          copy waternet.ino.bin release\waternet.bin
+          copy waternet.ino.bin distribution\Waternet\Waternet.bin
           
       # upload our artifact
       - name: Store artifact
         uses: actions/upload-artifact@v2
         with:
           name: Waternet Gamebuino META
-          path: release/
+          path: distribution/Waternet/
           # retention-days: 30
