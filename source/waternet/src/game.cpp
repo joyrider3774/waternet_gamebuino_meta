@@ -81,7 +81,7 @@ uint8_t drawGame(uint8_t drawWhat)
     //used when redrawing cursor stuff for example (not full background)
     if((drawWhat & drwPartialLevel) && !(drawWhat & drwLevel))
     {
-        drawLevel(boardX -1, boardY -1, boardX + boardWidth + 1, boardY + boardHeight + 1);
+        drawLevel(boardX -1 - posAdd, boardY -1 - posAdd, boardX + boardWidth + 1 + posAdd, boardY + boardHeight + 1 + posAdd);
         drawCursors();
     }
     
