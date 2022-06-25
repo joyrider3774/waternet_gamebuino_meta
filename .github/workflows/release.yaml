@@ -25,13 +25,13 @@ jobs:
       - name: Rezip Artifacts
         working-directory: artifacts
         run: |
-          7z a "Waternet Arduboy.zip" "./"
+          7z a "Waternet Gamebuino Meta.zip" "./"
       
       #make a draf release
       - name: Make Draft Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Waternet Arduboy vx.x
+          name: Waternet Gamebuino Meta Vx.x
           draft: true
           files: |
-            artifacts/Waternet Arduboy.zip
+            artifacts/Waternet Gamebuino Meta.zip
