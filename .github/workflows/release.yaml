@@ -23,7 +23,7 @@ jobs:
       
       #rezip them
       - name: Rezip Artifacts
-        working-directory: artifacts
+        working-directory: artifacts/Waternet Gamebuino META
         run: |
           7z a "Waternet Gamebuino Meta.zip" "./"
       
@@ -34,4 +34,4 @@ jobs:
           name: Waternet Gamebuino Meta Vx.x
           draft: true
           files: |
-            artifacts/Waternet Gamebuino Meta.zip
+            artifacts/Waternet Gamebuino META/Waternet Gamebuino Meta.zip
